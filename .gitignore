@@ -259,3 +259,10 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# Libraries
+!lib/**/[Bb]in/
+!lib/**/[Dd]ebug/
+!lib/**/[Rr]elease/
+
+
