@@ -63,10 +63,10 @@
       <EnableModules>false</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)lib\taglib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)lib\taglib\include;$(ProjectDir)lib\wingetopt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(ProjectDir)lib\taglib\bin\win32\$(Configuration)\tag.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)lib\taglib\bin\win32\$(Configuration)\tag.lib;$(ProjectDir)lib\wingetopt\bin\win32\$(Configuration)\wingetopt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
@@ -88,12 +88,12 @@
       <EnableModules>false</EnableModules>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>$(ProjectDir)lib\taglib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)lib\taglib\include;$(ProjectDir)lib\wingetopt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>$(ProjectDir)lib\taglib\bin\win32\$(Configuration)\tag.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)lib\taglib\bin\win32\$(Configuration)\tag.lib;$(ProjectDir)lib\wingetopt\bin\win32\$(Configuration)\wingetopt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
