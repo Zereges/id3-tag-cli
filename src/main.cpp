@@ -75,16 +75,6 @@ bool process_file(arguments&& args)
         return true;
     }
 
-    auto is_valid_string = [](const TagLib::String& str)
-    {
-        return !str.isNull();
-    };
-
-    auto is_valid_int = [](int value)
-    {
-        return value != 0;
-    };
-
     platform::cout << PS("Information for file ") << file_name << std::endl;
     print_field(PS("Artist"), tag.artist().toWString());
     print_field(PS(" Title"), tag.title().toWString());
