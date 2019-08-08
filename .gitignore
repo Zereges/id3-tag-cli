@@ -261,8 +261,4 @@ __pycache__/
 *.pyc
 
 # Libraries
-!lib/**/[Bb]in/
-!lib/**/[Dd]ebug/
-!lib/**/[Rr]elease/
-
-
+lib/
