@@ -26,9 +26,9 @@ bool process_field(TagLib::Tag& tag, SetF setter, const std::pair<bool, std::str
 }
 
 template<typename T>
-void print_field(const platform::string& field_name, const T& field_value)
+void print_field(const std::string& field_name, const T& field_value)
 {
-    platform::cout << field_name << PS(": ") << field_value << std::endl;
+    std::cout << field_name << ": " << field_value << std::endl;
 }
 
 bool process_file(arguments&& args)
@@ -75,13 +75,13 @@ bool process_file(arguments&& args)
         return true;
     }
 
-    platform::cout << PS("Information for file ") << file_name << std::endl;
-    print_field(PS("Artist"), tag.artist().toWString()); // ToDo: get it working on linux
-    print_field(PS(" Title"), tag.title().toWString());
-    print_field(PS(" Album"), tag.album().toWString());
-    print_field(PS("  Year"), tag.year());
-    print_field(PS(" Track"), tag.track());
-    print_field(PS(" Genre"), tag.genre().toWString());
+    std::cout << "Information for file " << file_name << std::endl;
+    print_field("Artist", tag.artist().to8Bit(true));
+    print_field(" Title", tag.title().to8Bit(true));
+    print_field(" Album", tag.album().to8Bit(true));
+    print_field("  Year", tag.year());
+    print_field(" Track", tag.track());
+    print_field(" Genre", tag.genre().to8Bit(true));
 
     return true;
 }
@@ -92,6 +92,7 @@ constexpr static const int RETURN_ERROR = 1;
 int MAIN(int argc, platform::char_t* argv[])
 {
     std::string exe_name = platform::convert::from_platform(argv[0]);
+
     std::optional<arguments> args;
     try
     {

@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <taglib/tstring.h>
 
 #ifdef _MSC_VER
   #define TAGLIB_HEADERS_BEGIN __pragma(warning(disable: 4251))
@@ -31,25 +32,19 @@ namespace platform
     {
         static_initialization()
         {
+            /*
             constexpr char cp_utf16le[] = ".1200";
             setlocale(LC_ALL, cp_utf16le);
             _setmode(_fileno(stdout), _O_WTEXT);
+            */
         }
     } init;
 
     using char_t = wchar_t;
     using string = std::wstring; // windows uses UTF16BE
-    using stream = std::wostream;
-    inline stream& cout = std::wcout;
-
-    #define PS(x) L ## x
 #elif __unix__
     using char_t = char;
     using string = std::string; // linux should use UTF8
-    using stream = std::ostream;
-    inline stream& cout = std::cout;
-
-    #define PS(x) x
 #else
     static_assert("Error: Unknown platform");
 #endif

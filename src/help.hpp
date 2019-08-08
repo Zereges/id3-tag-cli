@@ -12,7 +12,7 @@ inline void print_usage(std::ostream& stream, const std::string& exe_name)
 
 inline void print_version_info()
 {
-    platform::cout
+    std::cout
         << "id3-tags-cli " << std::fixed << std::setprecision(2) << VERSION / 100.0 << "\n"
         << "License GPL-3.0: GNU GPL version 3 <https://www.gnu.org/licenses/>" << "\n"
         << "This is free software: you are free to change and redistribute it." << "\n"

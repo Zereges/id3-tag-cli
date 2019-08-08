@@ -45,7 +45,6 @@ class arguments
     }
 
 public:
-    //static arguments parse_args(int argc, char** argv)
     static arguments parse_args(int argc, std::vector<std::string>& arg_vector)
     {
         std::vector<char*> argv;
