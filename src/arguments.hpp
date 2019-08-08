@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <string>
 #include <optional>
 #include <exception>
@@ -9,6 +9,11 @@
 
 struct arguments_parse_exception final : std::runtime_error
 {
+    arguments_parse_exception()
+        : runtime_error("")
+    {
+    }
+
     explicit arguments_parse_exception(const std::string& msg)
         : runtime_error(msg)
     {
@@ -27,12 +32,26 @@ class arguments
     {
     }
 
+    static bool is_valid_int(const std::string& str)
+    {
+        try
+        {
+            return std::stoi(optarg) >= 0;
+        }
+        catch (const std::invalid_argument&)
+        {
+            return false;
+        }
+    }
+
 public:
+    //static arguments parse_args(int argc, char** argv)
     static arguments parse_args(int argc, std::vector<std::string>& arg_vector)
     {
         std::vector<char*> argv;
         for (int i = 0; i < argc; ++i)
             argv.push_back(arg_vector[i].data());
+        argv.push_back(nullptr);
 
         arguments args{false, false};
         for (;;)
@@ -55,6 +74,8 @@ public:
             if (c == -1)
                 break;
 
+            using namespace std::string_literals;
+
             switch (c)
             {
             case 'h':
@@ -71,28 +92,31 @@ public:
                 args.m_album = optarg;
                 break;
             case 'y':
-                try
-                {
-                    args.m_year = std::stoi(optarg);
-                }
-                catch (const std::invalid_argument&)
-                {
-                }
+                args.m_year = optarg;
+                if (!is_valid_int(*args.m_year))
+                    throw arguments_parse_exception("Invalid year specification: "s + optarg);
                 break;
             case 'T':
-                try
-                {
-                    args.m_year = std::stoi(optarg);
-                }
-                catch (const std::invalid_argument&)
-                {
-                }
+                args.m_track = optarg;
+                if (!is_valid_int(*args.m_track))
+                    throw arguments_parse_exception("Invalid track specification: "s + optarg);
                 break;
             case 'g':
                 args.m_genre = optarg;
                 break;
+            default:
+                throw arguments_parse_exception();
             }
         }
+
+        if (optind == argc)
+            throw arguments_parse_exception("Missing file argument.");
+
+        args.m_file_name = argv[optind++];
+
+        if (optind != argc)
+            throw arguments_parse_exception("Only one file at the time may be specified.");
+
         return args;
     }
 
@@ -126,14 +150,14 @@ public:
         return { m_album.has_value(), m_album.value_or("") };
     }
 
-    std::pair<bool, int> year() const
+    std::pair<bool, std::string> year() const
     {
-        return { m_year.has_value(), m_year.value_or(0) };
+        return { m_year.has_value(), m_year.value_or("") };
     }
 
-    std::pair<bool, int> track() const
+    std::pair<bool, std::string> track() const
     {
-        return { m_track.has_value(), m_track.value_or(0) };
+        return { m_track.has_value(), m_track.value_or("") };
     }
 
     std::pair<bool, std::string> genre() const
@@ -148,7 +172,7 @@ private:
     std::optional<std::string> m_artist;
     std::optional<std::string> m_title;
     std::optional<std::string> m_album;
-    std::optional<int> m_year;
-    std::optional<int> m_track;
+    std::optional<std::string> m_year;
+    std::optional<std::string> m_track;
     std::optional<std::string> m_genre;
 };

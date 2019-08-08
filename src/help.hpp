@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -12,7 +12,7 @@ inline void print_usage(std::ostream& stream, const std::string& exe_name)
 
 inline void print_version_info()
 {
-    std::cout
+    platform::cout
         << "id3-tags-cli " << std::fixed << std::setprecision(2) << VERSION / 100.0 << "\n"
         << "License GPL-3.0: GNU GPL version 3 <https://www.gnu.org/licenses/>" << "\n"
         << "This is free software: you are free to change and redistribute it." << "\n"
@@ -41,7 +41,7 @@ inline void print_help(const std::string& exe_name)
         << "\n"
         << "  " << "If no argument is specified, information of given file is retrieved." << "\n"
         << "  " << "If the option is not specified, the value is unchanged." << "\n"
-        << "  " << "If the argument is empty string (\"\") the value is cleared." << "\n"
+        << "  " << "If the argument is empty string (\"\") (for [STR]) or 0 (for [INT]) the value is cleared." << "\n"
         << "\n"
         << "Written by Zereges <https://github.com/Zereges/id3-tag-cli>" << std::endl
         ;

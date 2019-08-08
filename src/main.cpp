@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <optional>
 
 #include "platform.hpp"
@@ -11,13 +11,88 @@ TAGLIB_HEADERS_END
 #include "arguments.hpp"
 #include "help.hpp"
 
+// SetF is void(TagLib::Tag::* setter)(T), for some T.
+// ConvF is T(*convert)(std::string) for SetF's T.
+template<typename SetF, typename ConvF>
+bool process_field(TagLib::Tag& tag, SetF setter, const std::pair<bool, std::string>& info, ConvF convert)
+{
+    auto& [valid, data] = info;
+    if (valid)
+    {
+        (tag.*setter)(convert(data));
+        return true;
+    }
+    return false;
+}
+
+template<typename T>
+void print_field(const platform::string& field_name, const T& field_value)
+{
+    platform::cout << field_name << PS(": ") << field_value << std::endl;
+}
+
 bool process_file(arguments&& args)
 {
-    /*
-        TagLib::FileRef f(argv[1]);
-        f.tag()->setTitle(argv[2]);
-        f.save();
-    */
+    platform::string file_name = platform::convert::to_platform(args.file_name());
+    TagLib::FileRef file(file_name.c_str());
+    
+    if (file.isNull())
+        return false;
+    
+    TagLib::Tag& tag = *file.tag();
+
+    auto [artist_valid, artist] = args.artist();
+    auto [title_valid, title] = args.title();
+    auto [album_valid, album] = args.album();
+    auto [year_valid, year] = args.year();
+    auto [track_valid, track] = args.track();
+    auto [genre_valid, genre] = args.genre();
+
+    auto utf8string = [](const std::string& str)
+    {
+        if (str.empty())
+            return TagLib::String::null;
+        return TagLib::String(str, TagLib::String::Type::UTF8);
+    };
+
+    // ReSharper disable once IdentifierTypo
+    auto stoi = [](const std::string& str)
+    {
+        return std::stoi(str); // overload
+    };
+
+    bool processed = false;
+    processed |= process_field(tag, &TagLib::Tag::setArtist, args.artist(), utf8string);
+    processed |= process_field(tag, &TagLib::Tag::setTitle, args.title(), utf8string);
+    processed |= process_field(tag, &TagLib::Tag::setAlbum, args.album(), utf8string);
+    processed |= process_field(tag, &TagLib::Tag::setYear, args.year(), stoi);
+    processed |= process_field(tag, &TagLib::Tag::setTrack, args.track(), stoi);
+    processed |= process_field(tag, &TagLib::Tag::setGenre, args.genre(), utf8string);
+
+    if (processed)
+    {
+        file.save();
+        return true;
+    }
+
+    auto is_valid_string = [](const TagLib::String& str)
+    {
+        return !str.isNull();
+    };
+
+    auto is_valid_int = [](int value)
+    {
+        return value != 0;
+    };
+
+    platform::cout << PS("Information for file ") << file_name << std::endl;
+    print_field(PS("Artist"), tag.artist().toWString());
+    print_field(PS(" Title"), tag.title().toWString());
+    print_field(PS(" Album"), tag.album().toWString());
+    print_field(PS("  Year"), tag.year());
+    print_field(PS(" Track"), tag.track());
+    print_field(PS(" Genre"), tag.genre().toWString());
+
     return true;
 }
 
@@ -26,7 +101,7 @@ constexpr static const int RETURN_ERROR = 1;
 
 int MAIN(int argc, platform::char_t* argv[])
 {
-    std::string exe_name = platform::convert::from(argv[0]);
+    std::string exe_name = platform::convert::from_platform(argv[0]);
     std::optional<arguments> args;
     try
     {
@@ -35,7 +110,7 @@ int MAIN(int argc, platform::char_t* argv[])
     }
     catch (const arguments_parse_exception& ex)
     {
-        std::cerr << ex.what() << "\n";
+        std::cerr << ex.what() << std::endl;
         print_usage(std::cerr, exe_name);
         return RETURN_ERROR;
     }
@@ -53,6 +128,7 @@ int MAIN(int argc, platform::char_t* argv[])
 
     if (!process_file(std::move(args.value())))
     {
+        std::cerr << "Couldn't process given file" << std::endl;
         print_usage(std::cerr, exe_name);
         return RETURN_ERROR;
     }
