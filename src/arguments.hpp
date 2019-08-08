@@ -69,7 +69,7 @@ public:
             };
 
             int option_index = 0;
-            int c = getopt_long(argc, argv.data(), "hva:t:A:y:Y:g:", options, &option_index);
+            int c = getopt_long(argc, argv.data(), "hva:t:A:y:T:g:", options, &option_index);
             if (c == -1)
                 break;
 
