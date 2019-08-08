@@ -76,7 +76,7 @@ bool process_file(arguments&& args)
     }
 
     platform::cout << PS("Information for file ") << file_name << std::endl;
-    print_field(PS("Artist"), tag.artist().toWString());
+    print_field(PS("Artist"), tag.artist().toWString()); // ToDo: get it working on linux
     print_field(PS(" Title"), tag.title().toWString());
     print_field(PS(" Album"), tag.album().toWString());
     print_field(PS("  Year"), tag.year());
