@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <string>
 
-constexpr static const int VERSION = 100;
+constexpr static int VERSION = 110;
 
 inline void print_usage(std::ostream& stream, const std::string& exe_name)
 {
@@ -39,7 +39,7 @@ inline void print_help(const std::string& exe_name)
         << "  " << "[STR] -  String type" << "\n"
         << "  " << "[INT] - Integer type" << "\n"
         << "\n"
-        << "  " << "If no argument is specified, information of given file is retrieved." << "\n"
+        << "  " << "If no arguments are specified, information of given file is retrieved." << "\n"
         << "  " << "If the option is not specified, the value is unchanged." << "\n"
         << "  " << "If the argument is empty string (\"\") (for [STR]) or 0 (for [INT]) the value is cleared." << "\n"
         << "\n"

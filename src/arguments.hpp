@@ -1,7 +1,7 @@
-﻿#pragma once
+﻿// ReSharper disable CppClangTidyConcurrencyMtUnsafe
+#pragma once
 #include <string>
 #include <optional>
-#include <exception>
 
 #include <getopt.h>
 
@@ -48,9 +48,11 @@ public:
     static arguments parse_args(int argc, std::vector<std::string>& arg_vector)
     {
         std::vector<char*> argv;
+        argv.reserve(argc);
         for (int i = 0; i < argc; ++i)
             argv.push_back(arg_vector[i].data());
-        argv.push_back(nullptr);
+
+        opterr = 0; // getopt segfaults while trying to print an error
 
         arguments args{false, false};
         for (;;)
@@ -119,47 +121,47 @@ public:
         return args;
     }
 
-    bool is_help() const
+    [[nodiscard]] bool is_help() const
     {
         return m_help;
     }
 
-    bool is_version() const
+    [[nodiscard]] bool is_version() const
     {
         return m_version;
     }
 
-    const std::string& file_name() const
+    [[nodiscard]] const std::string& file_name() const
     {
         return m_file_name;
     }
 
-    std::pair<bool, std::string> artist() const
+    [[nodiscard]] std::pair<bool, std::string> artist() const
     {
         return { m_artist.has_value(), m_artist.value_or("") };
     }
 
-    std::pair<bool, std::string> title() const
+    [[nodiscard]] std::pair<bool, std::string> title() const
     {
         return { m_title.has_value(), m_title.value_or("") };
     }
 
-    std::pair<bool, std::string> album() const
+    [[nodiscard]] std::pair<bool, std::string> album() const
     {
         return { m_album.has_value(), m_album.value_or("") };
     }
 
-    std::pair<bool, std::string> year() const
+    [[nodiscard]] std::pair<bool, std::string> year() const
     {
         return { m_year.has_value(), m_year.value_or("") };
     }
 
-    std::pair<bool, std::string> track() const
+    [[nodiscard]] std::pair<bool, std::string> track() const
     {
         return { m_track.has_value(), m_track.value_or("") };
     }
 
-    std::pair<bool, std::string> genre() const
+    [[nodiscard]] std::pair<bool, std::string> genre() const
     {
         return { m_genre.has_value(), m_genre.value_or("") };
     }

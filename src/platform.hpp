@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include <string>
 #include <vector>
-#include <iostream>
-#include <taglib/tstring.h>
 
 #ifdef _MSC_VER
   #define TAGLIB_HEADERS_BEGIN __pragma(warning(disable: 4251))
@@ -18,7 +16,6 @@
 
 #ifdef _MSC_VER
   #include <Windows.h>
-  #include <io.h>
   #include <fcntl.h>
 #define MAIN wmain
 #else
@@ -54,6 +51,7 @@ namespace platform
         static std::vector<std::string> convert_args(int argc, platform::char_t** argv)
         {
             std::vector<std::string> args;
+            args.reserve(argc);
             for (int i = 0; i < argc; ++i)
                 args.push_back(from_platform(argv[i]));
             return args;

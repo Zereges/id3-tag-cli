@@ -25,7 +25,7 @@ Usage: id3-tags-cli [options] file
   [STR] -  String type
   [INT] - Integer type
 
-  If no argument is specified, information of given file is retrieved.
+  If no arguments are specified, information of given file is retrieved.
   If the option is not specified, the value is unchanged.
   If the argument is empty string ("") (for [STR]) or 0 (for [INT]) the value is cleared.
 

@@ -31,7 +31,7 @@ void print_field(const std::string& field_name, const T& field_value)
     std::cout << field_name << ": " << field_value << std::endl;
 }
 
-bool process_file(arguments&& args)
+bool process_file(const arguments& args)
 {
     platform::string file_name = platform::convert::to_platform(args.file_name());
     TagLib::FileRef file(file_name.c_str());
@@ -41,17 +41,19 @@ bool process_file(arguments&& args)
     
     TagLib::Tag& tag = *file.tag();
 
+    /*
     auto [artist_valid, artist] = args.artist();
     auto [title_valid, title] = args.title();
     auto [album_valid, album] = args.album();
     auto [year_valid, year] = args.year();
     auto [track_valid, track] = args.track();
     auto [genre_valid, genre] = args.genre();
+    */
 
     auto utf8string = [](const std::string& str)
     {
         if (str.empty())
-            return TagLib::String::null;
+            return TagLib::String{};
         return TagLib::String(str, TagLib::String::Type::UTF8);
     };
 
@@ -86,8 +88,8 @@ bool process_file(arguments&& args)
     return true;
 }
 
-constexpr static const int RETURN_OK = 0;
-constexpr static const int RETURN_ERROR = 1;
+constexpr static int RETURN_OK = 0;
+constexpr static int RETURN_ERROR = 1;
 
 int MAIN(int argc, platform::char_t* argv[])
 {
@@ -117,7 +119,7 @@ int MAIN(int argc, platform::char_t* argv[])
         return RETURN_OK;
     }
 
-    if (!process_file(std::move(args.value())))
+    if (!process_file(args.value()))
     {
         std::cerr << "Couldn't process given file" << std::endl;
         print_usage(std::cerr, exe_name);
