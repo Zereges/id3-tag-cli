@@ -36,7 +36,7 @@ class arguments
     {
         try
         {
-            return std::stoi(optarg) >= 0;
+            return std::stoi(str) >= 0;
         }
         catch (const std::invalid_argument&)
         {
