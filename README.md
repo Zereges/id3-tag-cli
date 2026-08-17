@@ -64,14 +64,38 @@ Both use *CMake* build system.
 Or you can download pre-compiled versions here [`id3-tags-cli-win32-deps.zip`](https://github.com/Zereges/id3-tag-cli/releases/download/v1.0/id3-tags-cli-win32-deps.zip) and extract them to root directory (MSVC is configured to look for headers and static lib files there).
 
 ### Linux (make)
-Some distributions packages contains `libtag1-dev` (but it seems up untill taglib-2.3 it also compiles) which you can download and then just build using GCC and `pkg-config`.
 
-Otherwise, download and compile [TagLib](https://taglib.org/) yourself and update `Makefile` accordingly.
+To build `ID3TagCLI` you need:
 
-To build `id3-tag-cli`:
+* a C++17-compatible compiler, such as GCC or Clang
+* GNU Make
+* `pkg-config`
+* TagLib development files
+
+The Makefile uses `pkg-config` to obtain the compiler and linker options required by the installed TagLib library. You therefore normally do not need to manually configure TagLib include or library paths.
+
+On current Debian releases, for example:
 
 ```bash
-g++ -std=c++17 -O2 -Wall src/*.cpp -o id3-tags-cli $(pkg-config --cflags --libs taglib)
+sudo apt install build-essential pkg-config libtag-dev
+```
+
+Some older Debian and Ubuntu releases provide the TagLib development files as:
+
+```bash
+sudo apt install libtag1-dev
+```
+
+Clone the repository and run:
+
+```bash
+make
+```
+
+The resulting executable is:
+
+```text
+./id3-tags-cli
 ```
 
 ## License
